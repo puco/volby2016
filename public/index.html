@@ -47,14 +47,15 @@ var app = angular
     var es = new EventSource('/stream');
 
     es.addEventListener('message', function(event) {
+      console.log(event);
       $scope.data = JSON.parse(event.data);
       $scope.$apply();
     }, false);
 
-    es.addEventListener('open', function(event) {
-      $scope.data = JSON.parse(event.data);
-      $scope.$apply();
-    }, false);
+    // es.addEventListener('open', function(event) {
+    //   $scope.data = JSON.parse(event.data);
+    //   $scope.$apply();
+    // }, false);
 
   });
 
