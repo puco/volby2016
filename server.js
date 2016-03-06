@@ -20,7 +20,7 @@ const stream = new sse([data]);
 setInterval(() => {
   load('main');
   load('party', transformParty);
-}, 1000);
+}, 5000);
 
 let app = express();
 
@@ -60,13 +60,11 @@ function load(name, transformation) {
 }
 
 function update(name, newData) {
-  if (_.isEqual(data[name], newData)) {
-    return;
-  }
+  // if (_.isEqual(data[name], newData)) {
+  //   return;
+  // }
 
   data[name] = newData;
-
-  console.log(data);
 
   stream.send([data]);
   stream.updateInit([data]);
