@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="volby">
+<head>
+  <title></title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
+</head>
+<body>
+
+<div ng-controller="DataController">
+
+<p>Zmenene: {{data.main[0].C03}} {{data.main[0].C04}}</p>
+<p>Spocitane: {{data.main[3].C04}}</p>
+
+<table>
+<thead>
+<tr>
+  <th>Strana</th>
+  <td>Percenta</td>
+  <td>Hlasov</td>
+  <td>Mandaty</td>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="p in data.party | orderBy:'-percentage'">
+<th>{{p.name}}</th>
+<td>{{p.percentage}}</td>
+<td>{{p.votes}}</td>
+<td>{{p.mandates}}</td>
+</tr>
+</tbody>
+</table>
+
+<!-- <pre>{{data | json}}</pre> -->
+
+</div>
+
+<script>
+
+var app = angular
+  .module('volby', [])
+  .controller('DataController', function($scope) {
+    $scope.data = {};
+
+    var es = new EventSource('/stream');
+
+    es.addEventListener('message', function(event) {
+      $scope.data = JSON.parse(event.data);
+      $scope.$apply();
+    }, false);
+
+    es.addEventListener('open', function(event) {
+      $scope.data = JSON.parse(event.data);
+      $scope.$apply();
+    }, false);
+
+  });
+
+</script>
+</body>
+</html>
