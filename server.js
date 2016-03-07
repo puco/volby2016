@@ -30,23 +30,30 @@ app.get('/stream', stream.init);
 app.listen(process.env.PORT || 3000);
 
 function transformParty(parties) {
-  var x = _(parties)
+  var all = _(parties)
     .map(a => {
       return {
         name: a.C02,
         percentage: parseFloat(a.C04.replace(',', '.')),
         votes: parseInt(a.C03.replace(' ', ''))
       };
-    })
+    });
+
+  var eligible = all
     .filter(a => a.percentage >= 5)
     .value();
 
-  dhondt.compute(x, 150, {
+  dhondt.compute(eligible, 150, {
     voteAccessor: a => a.votes,
-    resultProperty: 'mandates',
+    resultProperty: 'mandates'
   });
 
-  return x;
+  var below = all
+    .filter(a => a.percentage < 5)
+    .map(a => { a.mandates = 0; return a; })
+    .value();
+
+  return _.flatten([eligible, below]);
 }
 
 function load(name, transformation) {
@@ -63,6 +70,8 @@ function update(name, newData) {
   if (_.isEqual(data[name], newData)) {
     return;
   }
+
+  data.timestamp = new Date();
 
   data[name] = newData;
 
