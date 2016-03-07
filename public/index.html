@@ -13,23 +13,24 @@
 
 <p>Zmenene: {{data.main[0].C03}} {{data.main[0].C04}}</p>
 <p>Spocitane: {{data.main[3].C04}}</p>
+<p>Timestamp: {{data.timestamp}}</p>
 
-<table>
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 <thead>
-<tr>
-  <th>Strana</th>
-  <td>Percenta</td>
-  <td>Hlasov</td>
-  <td>Mandaty</td>
-</tr>
+  <tr>
+    <th class="mdl-data-table__cell--non-numeric">Strana</th>
+    <td>Percenta</td>
+    <td>Hlasov</td>
+    <td>Mandaty</td>
+  </tr>
 </thead>
 <tbody>
-<tr ng-repeat="p in data.party | orderBy:'-percentage'">
-<th>{{p.name}}</th>
-<td>{{p.percentage}}</td>
-<td>{{p.votes}}</td>
-<td>{{p.mandates}}</td>
-</tr>
+  <tr ng-repeat="p in data.party | orderBy:'-percentage'">
+    <td class="mdl-data-table__cell--non-numeric">{{p.name}}</td>
+    <td>{{p.percentage | number:2}}</td>
+    <td>{{p.votes | number}}</td>
+    <td>{{p.mandates}}</td>
+  </tr>
 </tbody>
 </table>
 
